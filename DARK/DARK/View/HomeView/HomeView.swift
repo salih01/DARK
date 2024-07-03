@@ -44,6 +44,7 @@ struct HomeView: View {
                 .cornerRadius(30)
         )
         .padding(.all, 20)
+        
         .padding(.vertical, 20)
         .frame(height: imageSize2)
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 30, style: .continuous))
