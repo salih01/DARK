@@ -67,9 +67,10 @@ struct SettingsView: View {
             }
             Label(
                 title: { Text("Bildirimler") },
-                icon: { Image(systemName: "lines.measurement.horizontal").foregroundColor(.black) }
+                icon: { Image(systemName: "lines.measurement.horizontal")}
             )
         }
+        .foregroundColor(.blackAndWhite)
         .accentColor(.blue)
     }
     
@@ -103,6 +104,8 @@ struct SettingsView: View {
                 icon: { Image(systemName: "questionmark.circle") }
             )
         }
+        .foregroundColor(.blackAndWhite)
+
     }
 }
 
