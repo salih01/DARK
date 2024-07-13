@@ -1,32 +1,56 @@
 //
-//  Styles.swift
+//  View+Extension.swift
 //  DARK
 //
-//  Created by Mehmet Salih ÇAKMAK (Mobil Uygulamalar Uygulama Geliştirme Müdürlüğü) on 17.05.2024.
+//  Created by Mehmet Salih ÇAKMAK (Mobil Uygulamalar Uygulama Geliştirme Müdürlüğü) on 14.07.2024.
 //
 
 import SwiftUI
 
+// MARK: - View Extensions
+
+extension View {
+    // MARK: - BackgroundColor Modifier
+    func backgroundColor(opacity: Double = 0.6) -> some View {
+        self.modifier(BackgroundColor(opacity: opacity))
+    }
+
+    // MARK: - BackgroundStyle Modifier
+    func backgroundStyle(cornerRadius: CGFloat = 20, opacity: Double = 0.6) -> some View {
+        self.modifier(BackgroundStyle(cornerRadius: cornerRadius, opacity: opacity))
+    }
+
+    // MARK: - StrokeStyle Modifier
+    func strokeStyle(cornerRadius: CGFloat = 30) -> some View {
+        self.modifier(StrokeStyle(cornerRadius: cornerRadius))
+    }
+}
+
+// MARK: - StrokeStyle
+
 struct StrokeStyle: ViewModifier {
-    
-    //MARK: Corner Radius
-    
     var cornerRadius: CGFloat
     @Environment(\.colorScheme) var colorScheme
+    
     func body(content: Content) -> some View {
         content.overlay(
-            RoundedRectangle(cornerRadius: cornerRadius,style: .continuous)
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
                 .stroke(
                     .linearGradient(
                         colors: [
                             .white.opacity(colorScheme == .dark ? 0.6 : 0.3),
                             .black.opacity(0.1)
-                        ], startPoint: .top, endPoint: .bottom
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
                     )
                 )
         )
     }
 }
+
+// MARK: - OutlineOverlay
+
 struct OutlineOverlay: ViewModifier {
     @Environment(\.colorScheme) var colorScheme
     var cornerRadius: CGFloat = 20
@@ -41,12 +65,15 @@ struct OutlineOverlay: ViewModifier {
                             .black.opacity(colorScheme == .dark ? 0.3 : 0.1)
                         ],
                         startPoint: .top,
-                        endPoint: .bottom)
+                        endPoint: .bottom
+                    )
                 )
                 .blendMode(.overlay)
         )
     }
 }
+
+// MARK: - BackgroundStyle
 
 struct BackgroundStyle: ViewModifier {
     var cornerRadius: CGFloat = 20
@@ -61,6 +88,9 @@ struct BackgroundStyle: ViewModifier {
             .modifier(OutlineOverlay(cornerRadius: cornerRadius))
     }
 }
+
+// MARK: - BackgroundColor
+
 struct BackgroundColor: ViewModifier {
     var opacity: Double = 0.6
     @Environment(\.colorScheme) var colorScheme
@@ -73,22 +103,5 @@ struct BackgroundColor: ViewModifier {
                     .blendMode(.overlay)
                     .allowsHitTesting(false)
             )
-    }
-}
-extension View {
-    func backgroundColor(opacity: Double = 0.6) -> some View {
-        self.modifier(BackgroundColor(opacity: opacity))
-    }
-}
-
-extension View {
-    func backgroundStyle(cornerRadius: CGFloat = 20, opacity: Double = 0.6) -> some View {
-        self.modifier(BackgroundStyle(cornerRadius: cornerRadius, opacity: opacity))
-    }
-}
-
-extension View {
-    func strokeStyle(cornerRadius: CGFloat = 30) -> some View {
-        modifier(StrokeStyle(cornerRadius: 30))
     }
 }

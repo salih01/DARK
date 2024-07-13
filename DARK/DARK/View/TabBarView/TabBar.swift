@@ -8,46 +8,35 @@
 import SwiftUI
 
 struct TabBar: View {
-    @State var color: Color = .pink
-    @State var selectedX: CGFloat = 0
-    @State var x: [CGFloat] = [0, 0, 0, 0]
+    // MARK: - Properties
+    @State private var color: Color = .pink
+    @State private var selectedX: CGFloat = 0
+    @State private var x: [CGFloat] = [0, 0, 0, 0]
     
     @EnvironmentObject var model: Model
-    @AppStorage("selectedTab") var selectedTab: Tab = .home
+    @AppStorage("selectedTab") private var selectedTab: Tab = .home
     
+    // MARK: - Body
     var body: some View {
         GeometryReader { proxy in
             let hasHomeIndicator = proxy.safeAreaInsets.bottom > 0
             
-            HStack {
+            HStack(spacing: 0) {
                 content
             }
             .padding(.bottom, hasHomeIndicator ? 16 : 0)
             .frame(maxWidth: .infinity, maxHeight: hasHomeIndicator ? 88 : 49)
             .background(.ultraThinMaterial)
-            .background(
-                Circle()
-                    .fill(color)
-                    .offset(x: selectedX, y: -10)
-                    .frame(width: 88)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            )
-            .overlay(
-                Rectangle()
-                    .frame(width: 28, height: 5)
-                    .cornerRadius(3)
-                    .frame(width: 88)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                    .offset(x: selectedX)
-                    .blendMode(.overlay)
-            )
+            .background(indicatorCircle)
+            .overlay(indicatorLine)
             .backgroundStyle(cornerRadius: hasHomeIndicator ? 34 : 0)
             .frame(maxHeight: .infinity, alignment: .bottom)
             .ignoresSafeArea()
         }
     }
     
-    var content: some View {
+    // MARK: - Content
+    private var content: some View {
         ForEach(Array(tabItems.enumerated()), id: \.offset) { index, tab in
             TabButton(index: index, tab: tab)
                 .frame(maxWidth: .infinity)
@@ -56,7 +45,28 @@ struct TabBar: View {
         }
     }
     
-    func TabButton(index: Int, tab: TabItem) -> some View {
+    // MARK: - Indicator Circle
+    private var indicatorCircle: some View {
+        Circle()
+            .fill(color)
+            .offset(x: selectedX, y: -10)
+            .frame(width: 88)
+            .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    
+    // MARK: - Indicator Line
+    private var indicatorLine: some View {
+        Rectangle()
+            .frame(width: 28, height: 5)
+            .cornerRadius(3)
+            .frame(width: 88)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .offset(x: selectedX)
+            .blendMode(.overlay)
+    }
+    
+    // MARK: - TabButton
+    private func TabButton(index: Int, tab: TabItem) -> some View {
         Button {
             selectedTab = tab.selection
             withAnimation(.bouncy) {
