@@ -44,36 +44,39 @@ struct SongListView: View {
             .frame(width: UIScreen.screenWidth - 90, height: UIScreen.screenHeight / 2 - 190)
             .offset(y: -60)
             .cornerRadius(30)
+
     }
     
     var title: some View {
-        Text("Yağmur Sesleri")
-            .font(.title)
+        Text("Yağmur Sesleri".uppercased())
+            .font(.system(size: 24, weight: .bold))
             .fontWeight(.bold)
             .padding(.leading)
             .foregroundStyle(.linearGradient(colors:[.primary, .pink], startPoint: .topLeading, endPoint: .bottomTrailing))
+            .minimumScaleFactor(0.5)
             .offset(x: 0, y: -70)
     }
     
     var episodeInfo: some View {
         Text("10 Bölüm - 2 Saat".uppercased())
-            .font(.footnote)
+            .font(.system(size: 16, weight: .semibold))
             .fontWeight(.semibold)
             .padding(.leading)
             .foregroundStyle(.secondary)
             .frame(maxWidth: .infinity, alignment: .leading)
+            .minimumScaleFactor(0.5)
             .offset(x: 0, y: -70)
     }
     
     var description: some View {
-        Text("Yağmur ile iç içe geçip götünüzde pireler uçuşsun.Yağmur ile iç içe geçip götünüzde pireler uçuşsun")
-            .font(.footnote)
-            .fontWeight(.thin)
+        Text("Yağmur ile iç içe geçip götünüzde pireler uçuşsun.Yağmur ile iç içe geçip götünüzde pireler uçuşsun,Yağmur ile iç içe geçip götünüzde pireler uçuşsun.Yağmur ile iç içe geçip götünüzde pireler uçuşsun")
             .padding(.leading)
+            .font(.system(size: 14, weight: .thin))
+            .lineLimit(3)
             .multilineTextAlignment(.leading)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .lineLimit(2)
-            .offset(x: 0, y: -70)
+            .minimumScaleFactor(0.7)
+            .frame(maxWidth: UIScreen.screenWidth / 2 + 90, alignment: .leading)
+            .offset(x: 0, y: -50)
     }
 }
 
