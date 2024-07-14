@@ -11,10 +11,15 @@ struct HomeView: View {
     var body: some View {
         
         ScrollView {
-            VStack(spacing: 20) {
-                SongListView()
-                // Diğer içerik veya SongListView örnekleri buraya eklenebilir
-            }
+            SongListView()
+            Color.clear.frame(height: 5)
+        }
+        .safeAreaInset(edge: .top, content: {
+            Color.clear.frame(height: 70)
+
+        })
+        .overlay {
+            NavigationBar()
         }
     }
 }
