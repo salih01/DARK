@@ -19,7 +19,8 @@ struct NavigationBar: View {
                 .padding(.leading, 20)
         }
         .frame(height: 50)
-        .frame(maxHeight: .infinity, alignment: .top)    }
+        .frame(maxHeight: .infinity, alignment: .top)
+    }
 }
 
 #Preview {
