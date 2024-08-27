@@ -11,7 +11,29 @@ struct HomeView: View {
     var body: some View {
         
         ScrollView {
-            SongListView()
+            
+            TabView {
+                ForEach(0 ..< 5) { item in
+                    SongListView()
+                }
+                
+            }
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            .frame(height: UIScreen.screenHeight / 2 - 50)
+            .background(
+                Image("Blob1")
+                    .offset(x: 250, y: -100)
+            )
+            TabView {
+                ForEach(0 ..< 5) { item in
+                    SongListView()
+                }
+                
+            }
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            .frame(height: UIScreen.screenHeight / 2 - 50)
+
+            
             Color.clear.frame(height: 5)
         }
         .safeAreaInset(edge: .top, content: {

@@ -29,32 +29,26 @@ struct SongListView: View {
         .aspectRatio(contentMode: .fill)
         .shadow(color: Color("Shadow").opacity(0.3), radius: 10, x: 0, y: 10)
         .frame(width: imageWidth)
-        .background(
-            Image("Blob1")
-                .offset(x: 250, y: -100)
-        )
-        
-        
     }
     
     var centerImage: some View {
-        Image("imagesİstanbul")
+        Image("italy")
             .resizable()
             .aspectRatio(contentMode: .fill)
             .frame(width: UIScreen.screenWidth - 90, height: UIScreen.screenHeight / 2 - 190)
-            .offset(y: -60)
+            .offset(y: -30)
             .cornerRadius(30)
 
     }
     
     var title: some View {
-        Text("Yağmur Sesleri".uppercased())
+        Text("Yağmur Sesleri 🇮🇹".uppercased())
             .font(.system(size: 24, weight: .bold))
             .fontWeight(.bold)
             .padding(.leading)
             .foregroundStyle(.linearGradient(colors:[.primary, .pink], startPoint: .topLeading, endPoint: .bottomTrailing))
             .minimumScaleFactor(0.5)
-            .offset(x: 0, y: -70)
+            .offset(x: 0, y: -30)
     }
     
     var episodeInfo: some View {
@@ -65,7 +59,7 @@ struct SongListView: View {
             .foregroundStyle(.secondary)
             .frame(maxWidth: .infinity, alignment: .leading)
             .minimumScaleFactor(0.5)
-            .offset(x: 0, y: -70)
+            .offset(x: 0, y: -25)
     }
     
     var description: some View {
@@ -76,7 +70,7 @@ struct SongListView: View {
             .multilineTextAlignment(.leading)
             .minimumScaleFactor(0.7)
             .frame(maxWidth: UIScreen.screenWidth / 2 + 90, alignment: .leading)
-            .offset(x: 0, y: -50)
+            .offset(x: 0, y: -20)
     }
 }
 

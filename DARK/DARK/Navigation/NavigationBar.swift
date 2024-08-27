@@ -13,15 +13,13 @@ struct NavigationBar: View {
             Color.clear
                 .background(.ultraThinMaterial)
                 .blur(radius: 10)
-            Text("Home")
-                .font(.largeTitle.weight(.bold))
+            Text(" D A R K")
+                .font(.largeTitle.weight(.thin))
                 .frame(maxWidth: .infinity,alignment: .leading)
                 .padding(.leading, 20)
         }
         .frame(height: 50)
-        .frame(maxHeight: .infinity, alignment: .top)
-    }
-    
+        .frame(maxHeight: .infinity, alignment: .top)    }
 }
 
 #Preview {
