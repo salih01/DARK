@@ -14,7 +14,7 @@ struct NavigationBar: View {
                 .background(.ultraThinMaterial)
                 .blur(radius: 10)
             Text(" D A R K")
-                .font(.largeTitle.weight(.thin))
+                .font(.largeTitle.weight(.light))
                 .frame(maxWidth: .infinity,alignment: .leading)
                 .padding(.leading, 20)
         }

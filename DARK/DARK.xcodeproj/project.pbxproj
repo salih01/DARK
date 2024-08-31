@@ -82,7 +82,6 @@
 			isa = PBXGroup;
 			children = (
 				927ED2442C2B6A090027DBEA /* HomeView */,
-				9261E51F2C162E5000BF5AA6 /* TabBarView */,
 				9203E9452BF823C70025C396 /* SettingsView */,
 			);
 			path = View;
@@ -142,13 +141,6 @@
 				920770022BE958DF00DD5FA7 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		9261E51F2C162E5000BF5AA6 /* TabBarView */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = TabBarView;
 			sourceTree = "<group>";
 		};
 		926F59832C43256C00E605C5 /* TabItemModel */ = {
