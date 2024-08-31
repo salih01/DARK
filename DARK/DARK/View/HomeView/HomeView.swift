@@ -1,14 +1,17 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State private var imageOffset: CGFloat = 0
-
+    @State private var hasScrolled = false
+    @State private var offset: CGFloat = 0
+    
     var body: some View {
         ZStack(alignment: .top) {
+            
             ScrollView {
                 VStack(spacing: 0) {
                     GeometryReader { geometry in
-                        let offsetY = geometry.frame(in: .global).minY
+                        let minY = geometry.frame(in: .global).minY
+                        
                         Image("love")
                             .resizable()
                             .aspectRatio(contentMode: .fill)
@@ -16,14 +19,17 @@ struct HomeView: View {
                             .clipped()
                             .shadow(color: Color("Shadow").opacity(0.3), radius: 10, x: 0, y: 10)
                             .cornerRadius(30)
-                            .offset(y: offsetY > 0 ? -offsetY : 0)
-                            .onAppear {
-                                self.imageOffset = offsetY
+                            .offset(y: minY > 0 ? -minY : 0)
+                            .onChange(of: minY) { newValue in
+                                withAnimation(.easeInOut) {
+                                    hasScrolled = newValue < -UIScreen.screenHeight / 3
+                                }
                             }
+                        
+                        Color.clear.frame(height: UIScreen.screenHeight / 2)
                     }
-                    .frame(height: UIScreen.screenHeight / 3)
-
-                    // TabView with SongListView items
+                    .frame(height: UIScreen.screenHeight / 2)
+                    
                     TabView {
                         ForEach(0 ..< 5) { item in
                             SongListView()
@@ -31,6 +37,7 @@ struct HomeView: View {
                     }
                     .tabViewStyle(.page(indexDisplayMode: .always))
                     .frame(height: UIScreen.screenHeight / 2)
+                    
                     TabView {
                         ForEach(0 ..< 5) { item in
                             SongListView()
@@ -41,9 +48,9 @@ struct HomeView: View {
                 }
             }
             .edgesIgnoringSafeArea(.top)
-            .overlay {
-                NavigationBar()
-            }
+            
+            NavigationBar()
+                .opacity(hasScrolled ? 0 : 1)
         }
     }
 }
