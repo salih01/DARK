@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct SongListView: View {
+    
+    let imageWidth = UIScreen.screenWidth
+    let imageHeight = UIScreen.screenHeight
+    var rainSongListModel: RainSongListModel = rainSongList[0]
+    
     var body: some View {
-        let imageWidth = UIScreen.screenWidth
-        let imageHeight = UIScreen.screenHeight
-        
         VStack(alignment: .leading, spacing: 0) {
             centerImage
             Spacer()
@@ -32,7 +34,7 @@ struct SongListView: View {
     }
     
     var centerImage: some View {
-        Image("italy")
+        Image(rainSongListModel.image)
             .resizable()
             .aspectRatio(contentMode: .fill)
             .frame(width: UIScreen.screenWidth - 90, height: UIScreen.screenHeight / 2 - 190)
@@ -42,7 +44,7 @@ struct SongListView: View {
     }
     
     var title: some View {
-        Text("Yağmur Sesleri 🇮🇹".uppercased())
+        Text(rainSongListModel.title.uppercased())
             .font(.system(size: 24, weight: .bold))
             .fontWeight(.bold)
             .padding(.leading)
@@ -52,22 +54,22 @@ struct SongListView: View {
     }
     
     var episodeInfo: some View {
-        Text("10 Bölüm - 2 Saat".uppercased())
-            .font(.system(size: 16, weight: .semibold))
-            .fontWeight(.semibold)
+        Text(rainSongListModel.time.uppercased())
+            .font(.system(size: 16, weight: .heavy))
             .padding(.leading)
-            .foregroundStyle(.secondary)
+            .foregroundStyle(Color.gray)
             .frame(maxWidth: .infinity, alignment: .leading)
             .minimumScaleFactor(0.5)
             .offset(x: 0, y: -25)
     }
     
     var description: some View {
-        Text("Yağmur ile iç içe geçip götünüzde pireler uçuşsun.Yağmur ile iç içe geçip götünüzde pireler uçuşsun,Yağmur ile iç içe geçip götünüzde pireler uçuşsun.Yağmur ile iç içe geçip götünüzde pireler uçuşsun")
+        Text(rainSongListModel.subTitle)
             .padding(.leading)
-            .font(.system(size: 14, weight: .thin))
+            .font(.system(size: 14, weight: .medium))
             .lineLimit(3)
             .multilineTextAlignment(.leading)
+            .foregroundStyle(Color.gray)
             .minimumScaleFactor(0.7)
             .frame(maxWidth: UIScreen.screenWidth / 2 + 90, alignment: .leading)
             .offset(x: 0, y: -20)
