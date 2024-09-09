@@ -16,8 +16,10 @@ struct RainSongListModel: Identifiable {
 }
 
 var rainSongList = [
-    RainSongListModel(title: "Şiddetli Gök Gürültüsü ⚡️", time: "10 Bölüm 4 Saat", subTitle: "Şiddetli Gök Gürültüsü ve yağmurun içinde huzur bulmasına izin ver", image: "italy"),
+    RainSongListModel(title: "Şiddetli Gök Gürültüsü ⚡️", time: "10 Bölüm 4 Saat", subTitle: "Şiddetli Gök Gürültüsü ve yağmurun içinde huzur bulmasına izin ver", image: "paris"),
+    RainSongListModel(title: "Sebepsiz ⚡️", time: "3", subTitle: "Hiçbir fikrim yok", image: "italy"),
     RainSongListModel(title: "Sebepsiz ⚡️", time: "3", subTitle: "Hiçbir fikrim yok", image: "image")
+
 
     
 ]
