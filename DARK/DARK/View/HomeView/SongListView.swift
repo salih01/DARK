@@ -54,7 +54,7 @@ struct SongListView: View {
     }
     
     var episodeInfo: some View {
-        Text(rainSongListModel.time.uppercased())
+        Text(rainSongListModel.totalTime.uppercased())
             .font(.system(size: 16, weight: .heavy))
             .padding(.leading)
             .foregroundStyle(Color.gray)

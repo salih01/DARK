@@ -29,7 +29,7 @@ struct HomeView: View {
         GeometryReader { geometry in
             let minY = geometry.frame(in: .global).minY
             Image("love")
-                .resizable() 
+                .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight / 2)
                 .clipped()
@@ -48,7 +48,7 @@ struct HomeView: View {
     
     // MARK: Section Title
     var sectionTitle: some View {
-        Text("Y A Ğ M U R S E S L E R İ".uppercased())
+        Text("D O Ğ A   S E S L E R İ".uppercased())
             .font(.system(size: 17))
             .fontWeight(.thin)
             .minimumScaleFactor(0.5)
