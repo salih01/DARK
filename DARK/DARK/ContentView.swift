@@ -23,6 +23,10 @@ struct ContentView: View {
             }
             TabBar()
         }
+        .onAppear {
+            let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
+            print("Oturum açılan kullanıcı \(authUser?.email)")
+        }
         .safeAreaInset(edge: .bottom) {
             Color.clear.frame(height: 44)
         }

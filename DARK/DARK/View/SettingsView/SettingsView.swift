@@ -7,7 +7,26 @@
 
 import SwiftUI
 
+class SettingsViewModel: ObservableObject {
+    @Published var showSignIn: Bool = false
+    
+    init() {
+        checkAuthenticationStatus()
+    }
+    
+    func checkAuthenticationStatus() {
+        let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
+        self.showSignIn = authUser != nil
+    }
+    
+    func logOut() throws {
+        try AuthenticationManager.shared.signOut()
+        self.showSignIn = false
+    }
+}
+
 struct SettingsView: View {
+    @StateObject private var viewModel = SettingsViewModel()
     
     var body: some View {
         NavigationView {
@@ -58,6 +77,17 @@ struct SettingsView: View {
     //MARK: UP MENU
     var upMenu: some View {
         Section {
+            if viewModel.showSignIn {
+                 Button(action: {
+                     try? viewModel.logOut()
+                 }) {
+                     Label("Çıkış Yap", systemImage: "person")
+                 }
+             } else {
+                 NavigationLink(destination: AuthenticationView()) {
+                     Label("Giriş Yap", systemImage: "person")
+                 }
+             }
             NavigationLink(destination: ContentView()) {
                 Label(
                     title: { Text("Premium") },
@@ -105,7 +135,7 @@ struct SettingsView: View {
             )
         }
         .foregroundColor(.blackAndWhite)
-
+        
     }
 }
 

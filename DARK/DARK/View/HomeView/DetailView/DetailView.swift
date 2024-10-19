@@ -10,47 +10,62 @@ import SwiftUI
 struct DetailView: View {
     var songList: RainSongListModel
     var songListData: [RainSongListModel] = rainSongList
-    
+
     var body: some View {
         VStack {
-            GeometryReader { geometry in  // GeometryReader kullanarak ekran boyutlarını dinamik hale getiriyoruz
-                ZStack(alignment: .bottomLeading) {
-                    headerImage(songList.image)
-                        .blur(radius: 3)
+            songListView
+        }
+        .edgesIgnoringSafeArea(.top)
+        .toolbarBackground(.hidden, for: .navigationBar)
+    }
+    
+    // MARK: - Header View
+    var headerView: some View {
+        ZStack(alignment: .bottomLeading) {
+            headerImage(songList.image)
+                .blur(radius: 2)
 
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text(songList.title)
-                            .font(.system(size: geometry.size.width * 0.1))  // Ekran genişliğine göre dinamik font boyutu
-                            .fontWeight(.bold)
-                            .foregroundColor(.white)
-                            .shadow(radius: 5)
+            VStack(alignment: .leading, spacing: 8) {
+                Text(songList.title)
+                    .font(.system(size: UIScreen.screenWidth * 0.1))  // Dinamik font boyutu
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .shadow(radius: 5)
 
-                        Text(songList.subTitle)
-                            .font(.system(size: geometry.size.width * 0.04))  // Alt başlık için dinamik font boyutu
-                            .foregroundColor(.white)
-                            .shadow(radius: 5)
-                    }
-                    .frame(height: UIScreen.screenHeight / 3)  // Ekranın %60'ını kaplayacak şekilde dinamik yükseklik
-                    .padding(.leading, 20)
-                    .padding(.bottom, 60)  // Dikeyde dinamik padding
-                }
-                
+                Text(songList.subTitle)
+                    .font(.system(size: UIScreen.screenWidth * 0.04))  // Dinamik alt başlık fontu
+                    .foregroundColor(.white)
+                    .shadow(radius: 5)
             }
-            List(songListData) { song in
+            .padding(.leading, 20)
+            .padding(.bottom, 60)
+        }
+        .frame(height: UIScreen.screenHeight / 2)  // Yükseklik ayarı
+    }
+
+    var songListView: some View {
+        List {
+            Section {
+                headerView
+            }
+            .listRowSeparator(.hidden)
+            .padding(.bottom)
+            .listRowInsets(EdgeInsets())
+            
+            ForEach(songListData) { song in
                 HStack {
                     ZStack {
                         Image(song.image)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                            .frame(width: 90, height: 90)  // Şarkı resmi küçük boyut
+                            .frame(width: 90, height: 90)
                             .cornerRadius(10)
-                        
+
                         Image(systemName: "play.circle")
                             .resizable()
                             .aspectRatio(contentMode: .fill)
-                            .frame(width: 30, height: 30)  // Şarkı resmi küçük boyut
+                            .frame(width: 30, height: 30)
                             .cornerRadius(10)
-
                     }
                     
                     VStack(alignment: .leading) {
@@ -69,28 +84,23 @@ struct DetailView: View {
                         .foregroundColor(.secondary)
                 }
                 .padding(.vertical, 5)
+                .padding(.bottom, song == songListData.last ? 60 : 0)
             }
-            .listStyle(PlainListStyle())
         }
-        .navigationBarTitleDisplayMode(.inline)
+        .listStyle(PlainListStyle())
     }
-
-    // MARK: Header Image Section
+    
+    // MARK: - Header Image Component
     func headerImage(_ imageName: String) -> some View {
-        GeometryReader { geometry in
-            let minY = geometry.frame(in: .global).minY
-            Image(imageName)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: geometry.size.width, height: geometry.size.height * 1)  // Dinamik genişlik ve yükseklik
-                .clipped()
-                .cornerRadius(30)
-                .offset(y: minY > 0 ? -minY : 0)
-            Color.clear.frame(height: geometry.size.height * 0.5)
-        }
-        .frame(height: UIScreen.screenHeight / 2)
+        Image(imageName)
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+            .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight / 2)
+            .clipped()
+            .cornerRadius(30)
     }
 }
+
 
 #Preview {
     DetailView(songList: rainSongList[0])
