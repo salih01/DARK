@@ -6,58 +6,41 @@
 //
 
 import SwiftUI
+import GoogleSignIn
+import GoogleSignInSwift
 
 @MainActor
 final class SignInEmailViewModel: ObservableObject {
-    @Published var email = ""
-    @Published var password = ""
-    
-    func signIn() {
-        guard !email.isEmpty, !password.isEmpty else {
-            print("No Email and Password")
-            return
-        }
-        Task {
-            do {
-                let returnedUserData = try await AuthenticationManager.shared.createUser(email: email, password: password)
-                print(returnedUserData)
-
-            } catch {
-                print("Üye olunurken hata \(error)")
-            }
-        }
+    func signInGoogle() async throws {
+        let helper = SignInGoogleHelper()
+        let tokens = try await helper.signIn()
+        try await AuthenticationManager.shared.signInWithGoogle(tokens: tokens)
     }
 }
 
 struct SignInEmailView: View {
     @StateObject private var viewModel = SignInEmailViewModel()
-    
+    @State private var isSignedIn = false
+
     var body: some View {
         VStack {
-            TextField("Email", text: $viewModel.email)
-                .padding()
-                .background(Color.gray.opacity(0.4))
-                .clipShape(
-                    RoundedRectangle(cornerRadius: 10)
-                )
-            SecureField("Password", text: $viewModel.password)
-                .padding()
-                .background(Color.gray.opacity(0.4))
-                .clipShape(
-                    RoundedRectangle(cornerRadius: 10)
-                )
-            Button(action: {
-                viewModel.signIn()
-            }, label: {
-                Text("Giriş Yap")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                    .frame(height: 55)
-                    .frame(maxWidth: .infinity)
-                    .background(Color.blue)
-                    .cornerRadius(10)
-            })
-            Spacer()
+            GoogleSignInButton(viewModel: GoogleSignInButtonViewModel(scheme: .light, style: .wide, state: .normal)) {
+                Task {
+                    do {
+                        try await viewModel.signInGoogle()
+                        isSignedIn = true
+                        NotificationCenter.default.post(name: Notification.Name("SwitchToHome"), object: nil)
+
+
+                    } catch {
+                        
+                    }
+                }
+            }
+            NavigationLink(destination: ContentView(), isActive: $isSignedIn) {
+                EmptyView()
+            }
+            
         }
         .padding()
     }

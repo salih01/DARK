@@ -32,6 +32,21 @@ struct TabBar: View {
             .backgroundStyle(cornerRadius: hasHomeIndicator ? 34 : 0)
             .frame(maxHeight: .infinity, alignment: .bottom)
             .ignoresSafeArea()
+            .onAppear {
+                if let index = tabItems.firstIndex(where: { $0.selection == .home }) {
+                    selectedX = x[index]
+                    color = tabItems[index].color
+                }
+
+                NotificationCenter.default.addObserver(forName: Notification.Name("SwitchToHome"), object: nil, queue: .main) { _ in
+                    selectedTab = .home
+                    
+                    if let index = tabItems.firstIndex(where: { $0.selection == .home }) {
+                        selectedX = x[index]
+                        color = tabItems[index].color
+                    }
+                }
+            }
         }
     }
     
@@ -95,6 +110,13 @@ struct TabBar: View {
                         }
                 }
             )
+        }
+    }
+    
+    private func updateTabSelection() {
+        if let index = tabItems.firstIndex(where: { $0.selection == selectedTab }) {
+            selectedX = x[index]
+            color = tabItems[index].color
         }
     }
 }

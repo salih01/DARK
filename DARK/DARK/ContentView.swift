@@ -24,6 +24,8 @@ struct ContentView: View {
             TabBar()
         }
         .onAppear {
+            selectedTab = .home
+            
             let authUser = try? AuthenticationManager.shared.getAuthenticatedUser()
             print("Oturum açılan kullanıcı \(authUser?.email)")
         }

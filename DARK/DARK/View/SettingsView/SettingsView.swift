@@ -27,7 +27,7 @@ class SettingsViewModel: ObservableObject {
 
 struct SettingsView: View {
     @StateObject private var viewModel = SettingsViewModel()
-    
+
     var body: some View {
         NavigationView {
             List {
@@ -84,11 +84,11 @@ struct SettingsView: View {
                      Label("Çıkış Yap", systemImage: "person")
                  }
              } else {
-                 NavigationLink(destination: AuthenticationView()) {
+                 NavigationLink(destination: SignInEmailView()) {
                      Label("Giriş Yap", systemImage: "person")
                  }
              }
-            NavigationLink(destination: ContentView()) {
+            NavigationLink(destination: PremiumView()) {
                 Label(
                     title: { Text("Premium") },
                     icon: { Image(systemName: "creditcard") }
