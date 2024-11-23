@@ -1,54 +1,30 @@
 import SwiftUI
 
-final class HomeViewModel: BaseViewModel {
-    @Published var hasScrolled: Bool = false
-    @Published var offset: CGFloat = 0
-
-    // Gerekli verileri burada yüklemek için init() veya diğer metotları kullanabilirsiniz
-    override init() {
-        super.init()
-        // Örnek yükleme fonksiyonu
-        loadContent()
-    }
-
-    func loadContent() {
-
-    }
-}
-
-
 struct HomeView: View {
-    @StateObject private var viewModel = HomeViewModel()
+    @State private var hasScrolled = false
+    @State private var offset: CGFloat = 0
     
     var body: some View {
-        BaseView(viewModel: viewModel) {  // BaseView ile viewModel'ı bağlıyoruz
-            NavigationStack {
-                ZStack(alignment: .top) {
-                    ScrollView {
-                        VStack(spacing: 0) {
-                            headerImage
-                            sectionTitle
-                            rainSongListView
-                            Divider()
-                            motivationalTitle
-                            motivationalListView
-                            Divider()
-                        }
+        NavigationStack {
+            ZStack(alignment: .top) {
+                ScrollView {
+                    VStack(spacing: 0) {
+                        headerImage
+                        sectionTitle
+                        rainSongListView
+                        Divider()
+                        sampleSongListView
                     }
-                    .edgesIgnoringSafeArea(.top)
-                    .onChange(of: viewModel.offset) { newValue in
-                        withAnimation(.easeInOut) {
-                            viewModel.hasScrolled = newValue < -UIScreen.screenHeight / 3
-                        }
-                    }
-
-                    NavigationBar()
-                        .opacity(viewModel.hasScrolled ? 0 : 1)
                 }
+                .edgesIgnoringSafeArea(.top)
+                
+                NavigationBar()
+                    .opacity(hasScrolled ? 0 : 1)
             }
         }
     }
     
+    // MARK: Header Image Section
     var headerImage: some View {
         GeometryReader { geometry in
             let minY = geometry.frame(in: .global).minY
@@ -60,21 +36,28 @@ struct HomeView: View {
                 .shadow(color: Color("Shadow").opacity(0.3), radius: 10, x: 0, y: 10)
                 .cornerRadius(30)
                 .offset(y: minY > 0 ? -minY : 0)
+                .onChange(of: minY) { newValue in
+                    withAnimation(.easeInOut) {
+                        hasScrolled = newValue < -UIScreen.screenHeight / 3
+                    }
+                }
             Color.clear.frame(height: UIScreen.screenHeight / 2)
         }
         .frame(height: UIScreen.screenHeight / 2)
     }
-
+    
+    // MARK: Section Title
     var sectionTitle: some View {
         Text("D O Ğ A   S E S L E R İ".uppercased())
             .font(.system(size: 17))
-            .fontWeight(.semibold)
+            .fontWeight(.thin)
             .minimumScaleFactor(0.5)
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.leading, 40)
             .offset(y: 30)
     }
-
+    
+    // MARK: Rain Song List View
     var rainSongListView: some View {
         TabView {
             ForEach(rainSongList) { item in
@@ -86,26 +69,15 @@ struct HomeView: View {
         .tabViewStyle(.page(indexDisplayMode: .always))
         .frame(height: UIScreen.screenHeight / 2)
     }
-
-    var motivationalTitle: some View {
-        Text("M o t i v a s y o n   S e s l e r i ".uppercased())
-            .font(.system(size: 17))
-            .fontWeight(.semibold)
-            .minimumScaleFactor(0.5)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.leading, 40)
-            .offset(y: 30)
-    }
-
-    var motivationalListView: some View {
+    
+    // MARK: Sample Song List View
+    var sampleSongListView: some View {
         TabView {
-            ForEach(rainSongList) { item in
-                NavigationLink(destination: DetailView(songList: item)) {
-                    SongListView(rainSongListModel: item)
-                }
+            ForEach(0 ..< 5) { item in
+                SongListView()
             }
         }
-        .tabViewStyle(.page(indexDisplayMode: .always))
+        .tabViewStyle(.page(indexDisplayMode: .never))
         .frame(height: UIScreen.screenHeight / 2)
     }
 }

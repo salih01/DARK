@@ -25,15 +25,9 @@ struct NavigationBar: View {
                 // NavigationLink doğrudan kullanılıyor
                 NavigationLink(destination: PremiumView()) {
                     HStack {
-                        Image(systemName: "gift.fill")
-                            .resizable()
-                            .foregroundColor(.blackAndWhite)
-                            .scaledToFit()
-                            .frame(width: 40, height: 40)
-                            .aspectRatio(contentMode: .fill)
-                            .shadow(color: Color(.systemPink).opacity(1), radius: 10, x: 0, y: 10)
+                        LottieView(animationFileName: "premium", loopMode: .loop)
+                            .frame(width: 60, height: 60)
                     }
-                    .frame(width: 60, height: 80)
                     .background(Color.clear)
                     .padding(.horizontal)
                     .padding(.vertical, 8)

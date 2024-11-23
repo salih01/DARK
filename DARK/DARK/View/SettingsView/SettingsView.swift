@@ -27,6 +27,7 @@ class SettingsViewModel: ObservableObject {
 
 struct SettingsView: View {
     @StateObject private var viewModel = SettingsViewModel()
+    @Binding var isTabBarHidden: Bool
 
     var body: some View {
         NavigationView {
@@ -37,6 +38,9 @@ struct SettingsView: View {
             }
             .listStyle(.insetGrouped)
             .navigationTitle("Ayarlar")
+            .onAppear {
+                isTabBarHidden = false  // SettingsView açıldığında TabBar gösterilsin
+            }
         }
     }
     
@@ -62,9 +66,8 @@ struct SettingsView: View {
                     .font(.title)
                     .fontWeight(.bold)
                     .foregroundStyle(.linearGradient(colors:[.primary,.pink], startPoint: .topLeading, endPoint: .bottomTrailing))
-                Image(systemName: "checkmark.seal.fill")
-                    .foregroundStyle(.black, .green.opacity(1))
-                    .font(.system(size: 20))
+                LottieView(animationFileName: "premium", loopMode: .loop)
+                    .frame(width: 60, height: 60)
                 
             }
             Text("P r o  Ü y e".uppercased())
@@ -84,11 +87,11 @@ struct SettingsView: View {
                      Label("Çıkış Yap", systemImage: "person")
                  }
              } else {
-                 NavigationLink(destination: SignInEmailView()) {
+                 NavigationLink(destination: AuthenticationView().onAppear { isTabBarHidden = true }) {
                      Label("Giriş Yap", systemImage: "person")
                  }
              }
-            NavigationLink(destination: PremiumView()) {
+            NavigationLink(destination: PremiumView().onAppear { isTabBarHidden = true }) {
                 Label(
                     title: { Text("Premium") },
                     icon: { Image(systemName: "creditcard") }
@@ -119,7 +122,7 @@ struct SettingsView: View {
                 
             }
             
-            NavigationLink (destination: ContentView()){
+            NavigationLink(destination: ContentView().onAppear { isTabBarHidden = true }) {
                 Label(
                     title: { Text("Bize Ulaş") },
                     icon: { Image(systemName: "paperplane") }
@@ -142,5 +145,5 @@ struct SettingsView: View {
 
 
 #Preview {
-    SettingsView()
+    SettingsView(isTabBarHidden: .constant(false))
 }
