@@ -7,49 +7,65 @@
 
 import SwiftUI
 
+@MainActor
+final class AuthenticationViewModel: ObservableObject {
+    func signInGoogle() async throws {
+        let helper = SignInGoogleHelper()
+        let tokens = try await helper.signIn()
+        try await AuthenticationManager.shared.signInWithGoogle(tokens: tokens)
+    }
+}
 struct AuthenticationView: View {
+    @StateObject private var viewModel = AuthenticationViewModel()
+    @State private var isSignedIn = false
+    @Environment(\.colorScheme) var colorScheme
+    
     var body: some View {
         GeometryReader { geometry in
             VStack {
                 // Lottie animasyonu, ekranın yaklaşık 1/3'ünü kaplayacak
-                LottieView(animationFileName: "signIn", loopMode: .loop)
+                LottieView(animationFileName: "musicLogin", loopMode: .loop)
                     .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight / 3)
                 Spacer()
+                
+                // Apple ile giriş butonu
                 NavigationLink(destination: SignInEmailView()) {
-                    Text("Apple İle giriş yap")
+                    Text("Apple İle Giriş Yap")
                         .font(.headline)
                         .foregroundColor(.background)
-                        .frame(height: 50)
-                        .frame(maxWidth: .infinity)
+                        .frame(height: 45)
+                        .frame(maxWidth: 190)
                         .background(Color.blackAndWhite)
-                        .cornerRadius(15)
+                        .cornerRadius(30)
                         .padding(.horizontal, geometry.size.width * 0.1)
                 }
-
+                
                 Text("Veya")
                     .font(.callout)
-                    .padding(.vertical,geometry.size.height * 0.01)
-
-                // Email ile giriş yap butonu
-                NavigationLink(destination: SignInEmailView()) {
-                    Text("Google İle giriş yap")
-                        .font(.headline)
-                        .foregroundColor(.background)
-                        .frame(height: 50)
-                        .frame(maxWidth: .infinity)
-                        .background(Color.blackAndWhite)
-                        .cornerRadius(15)
-                        .padding(.horizontal, geometry.size.width * 0.1)
+                    .padding(.vertical, geometry.size.height * 0.01)
+                
+                // Özelleştirilmiş Google giriş butonu
+                Button(action: {
+                    Task {
+                        do {
+                            try await viewModel.signInGoogle()
+                            isSignedIn = true
+                            NotificationCenter.default.post(name: Notification.Name("SwitchToHome"), object: nil)
+                        } catch {
+                            print("Google Sign-In Error: \(error)")
+                        }
+                    }
+                }) {
+                    Image(colorScheme == .dark ? "ios_light_rd_SU" : "ios_dark_rd_SU")
+                        .aspectRatio(contentMode: .fit)
                 }
                 .padding(.bottom, 30)
-
                 
-                // Alt Bilgi ve Yasal Metinler
                 VStack(spacing: 6) {
                     Text("DARK'a giriş yaptığında, aşağıdaki şartları kabul etmiş olursun.")
                         .multilineTextAlignment(.center)
                         .padding(.bottom, 10)
-
+                    
                     HStack(spacing: 4) {
                         LinkText(text: "Şartlar ve Koşullar", url: "https://www.apple.com")
                         Text("ve")
@@ -60,8 +76,8 @@ struct AuthenticationView: View {
                 .foregroundColor(.secondary)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, geometry.size.width * 0.1)
-                .padding(.bottom, geometry.size.height * 0.05)            }
-            
+                .padding(.bottom, geometry.size.height * 0.05)
+            }
             .navigationTitle("Sign In")
             .frame(width: geometry.size.width, height: geometry.size.height)
         }
@@ -71,21 +87,5 @@ struct AuthenticationView: View {
 #Preview {
     NavigationStack {
         AuthenticationView()
-    }
-}
-
-struct LinkText: View {
-    let text: String
-    let url: String
-    
-    var body: some View {
-        Text(text)
-            .underline()
-            .foregroundColor(.pink) 
-            .onTapGesture {
-                if let link = URL(string: url) {
-                    UIApplication.shared.open(link)
-                }
-            }
     }
 }

@@ -8,19 +8,21 @@
 import SwiftUI
 import Combine
 
-class BaseViewModel: ObservableObject {
-    @Published var isLoading: Bool = false
-    @Published var errorMessage: String? = nil
+enum ViewState {
+    case none
+    case showAlert(AlertContent?)
+}
 
-    func startLoading() {
-        isLoading = true
-    }
+protocol BaseViewModelProtocol: ObservableObject {
+    var stateManager: StateManager { get }
+}
 
-    func stopLoading() {
-        isLoading = false
-    }
-
-    func setError(_ message: String) {
-        errorMessage = message
+class BaseViewModel: BaseViewModelProtocol {
+    @Published private(set) var stateManager: StateManager
+    private var cancellables = Set<AnyCancellable>()
+    
+    init() {
+        self.stateManager = StateManager()
     }
 }
+

@@ -1,34 +1,56 @@
 import SwiftUI
 
-struct HomeView: View {
-    @State private var hasScrolled = false
-    @State private var offset: CGFloat = 0
+class HomeViewModel: BaseViewModel {
+    @Published var title: String = "D A R K" // Dinamik başlık
+    @Published var hasScrolled: Bool = false // Scroll durumu için eklendi
     
+    func showAlert() {
+        let primaryButton = AlertButton(title: "OK", action: {
+            print("Primary Button Tapped")
+        })
+
+        let secondaryButton = AlertButton(title: "Cancel", action: {
+            print("Secondary Button Tapped")
+        })
+
+        let alertContent = AlertContent(title: "Alert Title", message: "This is an alert message.", primaryButton: primaryButton, secondaryButton: secondaryButton)
+
+        stateManager.viewState = .showAlert(alertContent)
+    }
+}
+struct HomeView: View {
+    @StateObject var viewModel = HomeViewModel()
     var body: some View {
-        NavigationStack {
-            ZStack(alignment: .top) {
-                ScrollView {
-                    VStack(spacing: 0) {
-                        headerImage
-                        sectionTitle
-                        rainSongListView
-                        Divider()
-                        sampleSongListView
+        BaseView(viewModel: viewModel) { // BaseView ile sarıldı
+            NavigationStack {
+                ZStack(alignment: .top) {
+                    ScrollView {
+                        VStack(spacing: 0) {
+                            headerImage
+                            sectionTitle
+                            rainSongListView
+                            Button("Show Alert") {
+                                viewModel.showAlert()
+                            }
+                            Divider()
+                            sampleSongListView
+                        }
                     }
+                    .edgesIgnoringSafeArea(.top)
+                    
+                    NavigationBar()
+                        .opacity(viewModel.hasScrolled ? 0 : 1) // ViewModel'den okuma
                 }
-                .edgesIgnoringSafeArea(.top)
-                
-                NavigationBar()
-                    .opacity(hasScrolled ? 0 : 1)
             }
+            
         }
     }
-    
+
     // MARK: Header Image Section
     var headerImage: some View {
         GeometryReader { geometry in
             let minY = geometry.frame(in: .global).minY
-            Image("love")
+            Image("calm")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight / 2)
@@ -38,14 +60,14 @@ struct HomeView: View {
                 .offset(y: minY > 0 ? -minY : 0)
                 .onChange(of: minY) { newValue in
                     withAnimation(.easeInOut) {
-                        hasScrolled = newValue < -UIScreen.screenHeight / 3
+                        viewModel.hasScrolled = newValue < -UIScreen.screenHeight / 3
                     }
                 }
             Color.clear.frame(height: UIScreen.screenHeight / 2)
         }
         .frame(height: UIScreen.screenHeight / 2)
     }
-    
+
     // MARK: Section Title
     var sectionTitle: some View {
         Text("D O Ğ A   S E S L E R İ".uppercased())
@@ -56,7 +78,7 @@ struct HomeView: View {
             .padding(.leading, 40)
             .offset(y: 30)
     }
-    
+
     // MARK: Rain Song List View
     var rainSongListView: some View {
         TabView {
@@ -69,7 +91,7 @@ struct HomeView: View {
         .tabViewStyle(.page(indexDisplayMode: .always))
         .frame(height: UIScreen.screenHeight / 2)
     }
-    
+
     // MARK: Sample Song List View
     var sampleSongListView: some View {
         TabView {
@@ -81,7 +103,6 @@ struct HomeView: View {
         .frame(height: UIScreen.screenHeight / 2)
     }
 }
-
 #Preview {
     HomeView()
 }

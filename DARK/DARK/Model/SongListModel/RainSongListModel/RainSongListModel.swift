@@ -17,7 +17,7 @@ struct RainSongListModel: Identifiable, Equatable {
 }
 
 var rainSongList = [
-    RainSongListModel(title: "Thunderstorm Ambience", totalTime: "8 Episodes, 3 Hours", time: "3:18", subTitle: "Immerse yourself in the calming sound of a distant thunderstorm and rain.", image: "batman"),
+    RainSongListModel(title: "Thunderstorm Ambience", totalTime: "8 Episodes, 3 Hours", time: "3:18", subTitle: "Immerse yourself in the calming sound of a distant thunderstorm and rain.", image: "calm2"),
     RainSongListModel(title: "Gentle Summer Rain", totalTime: "5 Episodes, 2 Hours", time: "2:45", subTitle: "Soft raindrops falling on leaves, a perfect sound for relaxation or sleep.", image: "hero"),
     RainSongListModel(title: "Forest Rain Sounds", totalTime: "7 Episodes, 2.5 Hours", time: "3:23", subTitle: "Listen to the serene sound of rain falling in the forest, accompanied by nature's whispers.", image: "love"),
     RainSongListModel(title: "Heavy Rain & Thunder", totalTime: "10 Episodes, 4 Hours", time: "3:23", subTitle: "Feel the intensity of heavy rain mixed with powerful thunder for a dramatic ambience.", image: "italy"),
