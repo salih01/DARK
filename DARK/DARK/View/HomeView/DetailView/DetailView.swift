@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct DetailView: View {
-    var songList: RainSongListModel
-    var songListData: [RainSongListModel] = rainSongList
+    var category: CategoryModel
 
     var body: some View {
         VStack {
@@ -19,28 +18,27 @@ struct DetailView: View {
         .toolbarBackground(.hidden, for: .navigationBar)
     }
     
-    // MARK: - Header View
     var headerView: some View {
         ZStack(alignment: .bottomLeading) {
-            headerImage(songList.image)
+            headerImage(category.image)
                 .blur(radius: 2)
 
             VStack(alignment: .leading, spacing: 8) {
-                Text(songList.title)
-                    .font(.system(size: UIScreen.screenWidth * 0.1))  // Dinamik font boyutu
+                Text(category.title)
+                    .font(.system(size: UIScreen.screenWidth * 0.1))
                     .fontWeight(.bold)
                     .foregroundColor(.white)
                     .shadow(radius: 5)
 
-                Text(songList.subTitle)
-                    .font(.system(size: UIScreen.screenWidth * 0.04))  // Dinamik alt başlık fontu
+                Text(category.subTitle)
+                    .font(.system(size: UIScreen.screenWidth * 0.04))
                     .foregroundColor(.white)
                     .shadow(radius: 5)
             }
             .padding(.leading, 20)
             .padding(.bottom, 60)
         }
-        .frame(height: UIScreen.screenHeight / 2)  // Yükseklik ayarı
+        .frame(height: UIScreen.screenHeight / 2)
     }
 
     var songListView: some View {
@@ -52,10 +50,10 @@ struct DetailView: View {
             .padding(.bottom)
             .listRowInsets(EdgeInsets())
             
-            ForEach(songListData) { song in
+            ForEach(category.subcategories, id: \.self) { subcategory in
                 HStack {
                     ZStack {
-                        Image(song.image)
+                        Image(category.image)
                             .resizable()
                             .aspectRatio(contentMode: .fill)
                             .frame(width: 90, height: 90)
@@ -69,9 +67,9 @@ struct DetailView: View {
                     }
                     
                     VStack(alignment: .leading) {
-                        Text(song.title)
+                        Text(subcategory)
                             .font(.headline)
-                        Text(song.totalTime)
+                        Text("Duration info") // Burada sürelere uygun dinamik bir alan eklenebilir
                             .font(.subheadline)
                             .foregroundColor(.gray)
                     }
@@ -79,18 +77,17 @@ struct DetailView: View {
                     
                     Spacer()
                     
-                    Text(song.time)
+                    Text("00:00") // Örnek süre
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
                 .padding(.vertical, 5)
-                .padding(.bottom, song == songListData.last ? 60 : 0)
+                .padding(.bottom, subcategory == category.subcategories.last ? 60 : 0)
             }
         }
         .listStyle(PlainListStyle())
     }
     
-    // MARK: - Header Image Component
     func headerImage(_ imageName: String) -> some View {
         Image(imageName)
             .resizable()
@@ -101,7 +98,14 @@ struct DetailView: View {
     }
 }
 
-
 #Preview {
-    DetailView(songList: rainSongList[0])
+    DetailView(category: CategoryModel(
+        id: "1",
+        name: "Sounds for Sleeping",
+        image: "calm",
+        title: "Relaxing Sleep Sounds",
+        subTitle: "Perfect for Rest",
+        description: "Enjoy soothing sounds for better sleep.",
+        subcategories: ["Rain Sounds", "Ocean Waves", "White Noise"]
+    ))
 }

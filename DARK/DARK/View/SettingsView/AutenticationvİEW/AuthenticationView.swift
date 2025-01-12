@@ -12,7 +12,9 @@ final class AuthenticationViewModel: ObservableObject {
     func signInGoogle() async throws {
         let helper = SignInGoogleHelper()
         let tokens = try await helper.signIn()
-        try await AuthenticationManager.shared.signInWithGoogle(tokens: tokens)
+        let authResult = try await AuthenticationManager.shared.signInWithGoogle(tokens: tokens)
+        let userModel = authResult.toUserModel()
+        try await FirestoreManager.shared.saveUser(user: userModel)
     }
 }
 struct AuthenticationView: View {

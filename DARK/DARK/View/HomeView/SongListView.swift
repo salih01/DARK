@@ -11,30 +11,41 @@ struct SongListView: View {
     
     let imageWidth = UIScreen.screenWidth
     let imageHeight = UIScreen.screenHeight
-    var rainSongListModel: RainSongListModel = rainSongList[0]
+    let category: CategoryModel
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            centerImage
-            Spacer()
-            title
-            episodeInfo
-            description
-        }
-        .frame(maxWidth: imageWidth - 90, maxHeight: imageHeight / 2 - 100)
-        .modifier(StrokeStyle(cornerRadius: 30))
-        .background(
-            RoundedRectangle(cornerRadius: 30, style: .continuous)
-                .fill(.ultraThinMaterial)
-        )
-        .padding(.horizontal, 30)
-        .aspectRatio(contentMode: .fill)
-        .shadow(color: Color("Shadow").opacity(0.3), radius: 10, x: 0, y: 10)
+        VStack {
+            sectionTitle
+            VStack(alignment: .leading, spacing: 0) {
+                centerImage
+                Spacer()
+                title
+                episodeInfo
+                description
+            }
+            .frame(maxWidth: imageWidth - 90, maxHeight: imageHeight / 2 - 100)
+            .modifier(StrokeStyle(cornerRadius: 30))
+            .background(
+                RoundedRectangle(cornerRadius: 30, style: .continuous)
+                    .fill(.ultraThinMaterial)
+            )
+            .padding(.horizontal, 30)
+            .aspectRatio(contentMode: .fill)
+            .shadow(color: Color("Shadow").opacity(0.3), radius: 10, x: 0, y: 10)
         .frame(width: imageWidth)
+        }
+    }
+    var sectionTitle: some View {
+        Text(category.name)
+            .font(.system(size: 20))
+            .fontWeight(.thin)
+            .minimumScaleFactor(0.5)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.leading, 45)
     }
     
     var centerImage: some View {
-        Image(rainSongListModel.image)
+        Image("")
             .resizable()
             .aspectRatio(contentMode: .fill)
             .frame(width: UIScreen.screenWidth - 90, height: UIScreen.screenHeight / 2 - 190)
@@ -44,7 +55,7 @@ struct SongListView: View {
     }
     
     var title: some View {
-        Text(rainSongListModel.title.uppercased())
+        Text(category.title.uppercased())
             .font(.system(size: 24, weight: .bold))
             .fontWeight(.bold)
             .padding(.leading)
@@ -55,7 +66,7 @@ struct SongListView: View {
     }
     
     var episodeInfo: some View {
-        Text(rainSongListModel.totalTime.uppercased())
+        Text(category.subTitle.uppercased())
             .font(.system(size: 16, weight: .heavy))
             .padding(.leading)
             .padding(.trailing)
@@ -66,7 +77,7 @@ struct SongListView: View {
     }
     
     var description: some View {
-        Text(rainSongListModel.subTitle)
+        Text(category.description)
             .padding(.leading)
             .font(.system(size: 14, weight: .medium))
             .lineLimit(3)
@@ -80,5 +91,14 @@ struct SongListView: View {
 
 
 #Preview {
-    SongListView()
-}
+    SongListView(
+        category: CategoryModel(
+            id: "1",
+            name: "Sounds for Sleeping",
+            image: "sleeping_image",
+            title: "Relaxing Sleep Sounds",
+            subTitle: "5 Songs",
+            description: "Enjoy peaceful sounds to help you sleep better.",
+            subcategories: ["Rain and Thunder Sounds", "Ocean Waves", "Forest Ambience", "White Noise", "Fireplace Crackling"]
+        )
+    )}

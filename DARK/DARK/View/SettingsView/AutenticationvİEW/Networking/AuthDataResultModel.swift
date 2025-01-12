@@ -20,3 +20,14 @@ struct AuthDataResultModel {
         self.isAnonymous = user.isAnonymous
     }
 }
+
+extension AuthDataResultModel {
+    func toUserModel() -> UserModel {
+        return UserModel(
+            uid: self.uid ?? "",
+            email: self.email ?? "",
+            photoURL: self.photoURL,
+            isAnonymous: self.isAnonymous ?? false
+        )
+    }
+}

@@ -8,7 +8,6 @@
 import SwiftUI
 import CoreData
 
-
 class ContentViewModel: ObservableObject {
     @Published var selectedTab: Tab = .home
     
