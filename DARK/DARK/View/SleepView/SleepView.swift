@@ -12,6 +12,7 @@ struct SleepView: View {
     @State private var answers: [Double] = [50, 50, 50]
     @State private var sleepScores: [String: Double] = [:] // Günlük skorları saklayan dictionary
     @State private var isFinalScreenVisible = false // Skor ekranını kontrol etmek için
+    @State private var hasAnsweredToday = false
     let feedbackGenerator = UISelectionFeedbackGenerator()
     let questions = [
         "Dün gece uykun verimli miydi?",
@@ -25,15 +26,30 @@ struct SleepView: View {
                 VStack {
                     calendarView
                     Spacer()
-                    if isFinalScreenVisible {
-                        sleepScoreCard
+                    if hasAnsweredToday {
+
                     } else {
-                        questionCard
+                        if isFinalScreenVisible {
+                            sleepScoreCard
+                        } else {
+                            questionCard
+                        }
                     }
                 }
                 .padding(.top, 20)
             }
             .navigationTitle("Sleep")
+            .onAppear {
+                checkIfUserAnsweredToday()
+                loadSleepScores()
+            }
+        }
+    }
+    
+    func loadSleepScores() {
+        if let savedData = UserDefaults.standard.data(forKey: "sleepScores"),
+           let decoded = try? JSONDecoder().decode([String: Double].self, from: savedData) {
+            sleepScores = decoded
         }
     }
     
@@ -60,7 +76,7 @@ struct SleepView: View {
                             .fontWeight(.bold)
                             .foregroundColor(getScoreColor(for: score))
                     } else {
-                        Text("")
+                        Text("-")
                             .font(.caption)
                             .foregroundColor(.gray)
                     }
@@ -149,19 +165,28 @@ struct SleepView: View {
             currentQuestionIndex += 1
         } else {
             saveSleepScore()
-            isFinalScreenVisible = true // Skor ekranını aç
+            isFinalScreenVisible = true
+            hasAnsweredToday = true
+            saveAnsweredToday()
             let successFeedback = UINotificationFeedbackGenerator()
             successFeedback.notificationOccurred(.success)
+        }
+    }
+    
+    func saveSleepScores() {
+        if let encoded = try? JSONEncoder().encode(sleepScores) {
+            UserDefaults.standard.set(encoded, forKey: "sleepScores")
         }
     }
     
     func saveSleepScore() {
         let averageScore = answers.reduce(0, +) / Double(answers.count)
         let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date())
-        
+
         if let yesterday = yesterday {
             let formattedDate = self.formattedDate(yesterday, format: "yyyy-MM-dd")
             sleepScores[formattedDate] = averageScore
+            saveSleepScores()
         }
     }
     
@@ -203,10 +228,24 @@ struct SleepView: View {
         return []
     }
     
+    func checkIfUserAnsweredToday() {
+        let today = formattedDate(Date(), format: "yyyy-MM-dd")
+        let lastAnsweredDate = UserDefaults.standard.string(forKey: "lastAnsweredDate") ?? ""
+
+        if today == lastAnsweredDate {
+            hasAnsweredToday = true
+        }
+    }
+    
     func formattedDate(_ date: Date, format: String) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = format
         return formatter.string(from: date)
+    }
+    
+    func saveAnsweredToday() {
+        let today = formattedDate(Date(), format: "yyyy-MM-dd")
+        UserDefaults.standard.set(today, forKey: "lastAnsweredDate")
     }
 }
 
