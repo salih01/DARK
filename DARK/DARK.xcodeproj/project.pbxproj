@@ -29,6 +29,7 @@
 		924D77092CC442AC000532CE /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924D77082CC442AC000532CE /* Utilities.swift */; };
 		924D770C2CC4448B000532CE /* GoogleSignInResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924D770B2CC4448B000532CE /* GoogleSignInResultModel.swift */; };
 		924D770E2CC444C2000532CE /* AuthDataResultModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 924D770D2CC444C2000532CE /* AuthDataResultModel.swift */; };
+		9256941F2D6202DF0019F2F6 /* SleepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9256941E2D6202DF0019F2F6 /* SleepView.swift */; };
 		925954AD2CC3D9510025C49D /* SignInEmailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925954AC2CC3D9510025C49D /* SignInEmailView.swift */; };
 		925954AF2CC3E1D30025C49D /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 925954AE2CC3E1D30025C49D /* AuthenticationManager.swift */; };
 		926F59852C4326B100E605C5 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 926F59842C4326B100E605C5 /* View+Extension.swift */; };
@@ -75,6 +76,7 @@
 		924D77082CC442AC000532CE /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		924D770B2CC4448B000532CE /* GoogleSignInResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoogleSignInResultModel.swift; sourceTree = "<group>"; };
 		924D770D2CC444C2000532CE /* AuthDataResultModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthDataResultModel.swift; sourceTree = "<group>"; };
+		9256941E2D6202DF0019F2F6 /* SleepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepView.swift; sourceTree = "<group>"; };
 		925954AC2CC3D9510025C49D /* SignInEmailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInEmailView.swift; sourceTree = "<group>"; };
 		925954AE2CC3E1D30025C49D /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		926F59842C4326B100E605C5 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 			isa = PBXGroup;
 			children = (
 				927ED2442C2B6A090027DBEA /* HomeView */,
+				9256941D2D6202C80019F2F6 /* SleepView */,
 				9203E9452BF823C70025C396 /* SettingsView */,
 			);
 			path = View;
@@ -249,6 +252,14 @@
 				9233CB2B2D21A145005D84FA /* FirestoreManager.swift */,
 			);
 			path = Networking;
+			sourceTree = "<group>";
+		};
+		9256941D2D6202C80019F2F6 /* SleepView */ = {
+			isa = PBXGroup;
+			children = (
+				9256941E2D6202DF0019F2F6 /* SleepView.swift */,
+			);
+			path = SleepView;
 			sourceTree = "<group>";
 		};
 		926F59832C43256C00E605C5 /* TabItemModel */ = {
@@ -423,6 +434,7 @@
 				92076FFE2BE958DE00DD5FA7 /* ContentView.swift in Sources */,
 				92D23E4F2C28AE300031EC98 /* PreferenceKey.swift in Sources */,
 				9276D4302C43BC84002A90B1 /* SongListView.swift in Sources */,
+				9256941F2D6202DF0019F2F6 /* SleepView.swift in Sources */,
 				925954AD2CC3D9510025C49D /* SignInEmailView.swift in Sources */,
 				9231AEF92CD6B704004ED273 /* BaseView.swift in Sources */,
 				927ED2462C2B6A230027DBEA /* HomeView.swift in Sources */,

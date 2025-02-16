@@ -16,12 +16,14 @@ struct TabItem: Identifiable {
 }
 
 var tabItems = [
-    TabItem(name: "Learn Now", icon: "house", color: .pink, selection: .home),
-    TabItem(name: "Settings", icon: "gear", color: .blue, selection: .settings)
+    TabItem(name: "Home", icon: "house", color: .pink, selection: .home),
+    TabItem(name: "Sleep", icon: "moon.fill", color: .purple, selection: .sleep),
+    TabItem(name: "Settings", icon: "gear", color: .cyan, selection: .settings)
 
 ]
 
 enum Tab: String {
     case home
+    case sleep
     case settings
 }

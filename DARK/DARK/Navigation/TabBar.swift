@@ -11,7 +11,7 @@ struct TabBar: View {
     @Binding var selectedTab: Tab
     @State private var color: Color = .pink
     @State private var selectedX: CGFloat = 0
-    @State private var x: [CGFloat] = [0, 0, 0, 0]
+    @State private var x: [CGFloat] = [0, 0, 0]
 
     var body: some View {
         GeometryReader { proxy in
@@ -37,15 +37,6 @@ struct TabBar: View {
                 if let index = tabItems.firstIndex(where: { $0.selection == selectedTab }) {
                     selectedX = x[index]
                     color = tabItems[index].color
-                }
-
-                NotificationCenter.default.addObserver(forName: Notification.Name("SwitchToHome"), object: nil, queue: .main) { _ in
-                    selectedTab = .home
-                    
-                    if let index = tabItems.firstIndex(where: { $0.selection == .home }) {
-                        selectedX = x[index]
-                        color = tabItems[index].color
-                    }
                 }
             }
         }
@@ -80,8 +71,8 @@ struct TabBar: View {
             VStack(spacing: 0) {
                 Image(systemName: tab.icon)
                     .symbolVariant(.fill)
-                    .font(.system(size: 17, weight: .bold))
-                    .frame(width: 44, height: 29)
+                    .font(.system(size: index == 1 ? 20 : 17, weight: .bold))
+                    .frame(width: 44, height: index == 1 ? 35 : 29)
                 Text(tab.name).font(.caption2)
                     .frame(width: 88)
                     .lineLimit(1)

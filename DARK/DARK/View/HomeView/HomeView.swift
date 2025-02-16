@@ -1,18 +1,25 @@
 import SwiftUI
 
 class HomeViewModel: BaseViewModel {
-    @Published var title: String = "D A R K"
     @Published var hasScrolled: Bool = false
     @Published var categories: [CategoryModel] = []
-    
+    @Published var isLoading: Bool = false
+
     func fetchCategories() async {
+        DispatchQueue.main.async {
+            self.isLoading = true
+        }
+        
         do {
             let fetchedCategories = try await FirestoreManager.shared.fetchCategories()
             DispatchQueue.main.async {
                 self.categories = fetchedCategories
+                self.isLoading = false
             }
         } catch {
-            print("Error fetching categories: \(error)")
+            DispatchQueue.main.async {
+                self.isLoading = false
+            }
         }
     }
 }
@@ -20,27 +27,34 @@ class HomeViewModel: BaseViewModel {
 struct HomeView: View {
     @StateObject var viewModel = HomeViewModel()
     var body: some View {
-        BaseView(viewModel: viewModel) { // BaseView ile sarıldı
+        BaseView(viewModel: viewModel) {
             NavigationStack {
                 ZStack(alignment: .top) {
-                    ScrollView {
-                        VStack(spacing: 10) {
-                            headerImage
-                            rainSongListView
+                    if viewModel.isLoading {
+                        VStack {
+                            Spacer()
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: .black0))
+                                .scaleEffect(1.5)
+                            Spacer()
                         }
+                    } else {
+                        ScrollView {
+                            VStack(spacing: 10) {
+                                headerImage
+                                rainSongListView
+                            }
+                        }
+                        .edgesIgnoringSafeArea(.top)
                     }
-                    .edgesIgnoringSafeArea(.top)
-                    .task {
-                        await viewModel.fetchCategories()
-                        debugPrint(viewModel.categories)
-                        
-                    }
-                    
+
                     NavigationBar()
                         .opacity(viewModel.hasScrolled ? 0 : 1)
                 }
+                .task {
+                    await viewModel.fetchCategories()
+                }
             }
-            
         }
     }
     
@@ -52,7 +66,6 @@ struct HomeView: View {
                 .aspectRatio(contentMode: .fill)
                 .frame(width: UIScreen.screenWidth, height: UIScreen.screenHeight / 2)
                 .clipped()
-                .shadow(color: Color("Shadow").opacity(0.3), radius: 10, x: 0, y: 10)
                 .cornerRadius(30)
                 .offset(y: minY > 0 ? -minY : 0)
                 .onChange(of: minY) { newValue in
@@ -62,6 +75,7 @@ struct HomeView: View {
                 }
             Color.clear.frame(height: UIScreen.screenHeight / 2)
         }
+        .shadow(color: Color("Shadow").opacity(0.3), radius: 10, x: 0, y: 10)
         .tabViewStyle(.page(indexDisplayMode: .never))
         .frame(height: UIScreen.screenHeight / 2)
     }

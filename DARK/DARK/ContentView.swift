@@ -32,6 +32,8 @@ struct ContentView: View {
                 switch viewModel.selectedTab {
                 case .home:
                     HomeView()
+                case .sleep:
+                    SleepView()
                 case .settings:
                     SettingsView(isTabBarHidden: $isTabBarHidden)
                 }

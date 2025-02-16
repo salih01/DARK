@@ -37,11 +37,12 @@ struct SongListView: View {
     }
     var sectionTitle: some View {
         Text(category.name)
-            .font(.system(size: 20))
-            .fontWeight(.thin)
-            .minimumScaleFactor(0.5)
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .font(.system(size: 24, weight: .bold))
+            .fontWeight(.bold)
             .padding(.leading, 45)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .foregroundStyle(.linearGradient(colors:[.primary, .pink], startPoint: .topLeading, endPoint: .bottomTrailing))
+            .minimumScaleFactor(0.5)
     }
     
     var centerImage: some View {
@@ -57,10 +58,10 @@ struct SongListView: View {
     var title: some View {
         Text(category.title.uppercased())
             .font(.system(size: 24, weight: .bold))
+            .foregroundStyle(Color.blackAndWhite)
             .fontWeight(.bold)
             .padding(.leading)
             .padding(.trailing)
-            .foregroundStyle(.linearGradient(colors:[.primary, .pink], startPoint: .topLeading, endPoint: .bottomTrailing))
             .minimumScaleFactor(0.5)
             .offset(x: 0, y: -30)
     }
