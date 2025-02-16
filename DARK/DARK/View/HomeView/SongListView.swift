@@ -32,7 +32,7 @@ struct SongListView: View {
             .padding(.horizontal, 30)
             .aspectRatio(contentMode: .fill)
             .shadow(color: Color("Shadow").opacity(0.3), radius: 10, x: 0, y: 10)
-        .frame(width: imageWidth)
+            .frame(width: imageWidth)
         }
     }
     var sectionTitle: some View {
