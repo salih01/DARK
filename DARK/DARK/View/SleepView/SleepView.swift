@@ -13,6 +13,9 @@ struct SleepView: View {
     @State private var sleepScores: [String: Double] = [:] // Günlük skorları saklayan dictionary
     @State private var isFinalScreenVisible = false // Skor ekranını kontrol etmek için
     @State private var hasAnsweredToday = false
+    @State private var currentDate = Date()
+    
+    
     let feedbackGenerator = UISelectionFeedbackGenerator()
     let questions = [
         "Dün gece uykun verimli miydi?",
@@ -27,7 +30,7 @@ struct SleepView: View {
                     calendarView
                     Spacer()
                     if hasAnsweredToday {
-
+                        
                     } else {
                         if isFinalScreenVisible {
                             sleepScoreCard
@@ -46,45 +49,22 @@ struct SleepView: View {
         }
     }
     
-    func loadSleepScores() {
-        if let savedData = UserDefaults.standard.data(forKey: "sleepScores"),
-           let decoded = try? JSONDecoder().decode([String: Double].self, from: savedData) {
-            sleepScores = decoded
-        }
-    }
-    
     var calendarView: some View {
-        let weekDays = getCurrentWeekDays()
-        let buttonWidth = UIScreen.screenWidth / 8
-        
-        return HStack(spacing: UIScreen.screenWidth * 0.015) {
-            ForEach(weekDays, id: \.self) { date in
-                VStack {
-                    Text(formattedDate(date, format: "E"))
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                    
-                    Text(formattedDate(date, format: "d"))
-                        .font(.headline)
-                        .foregroundColor(.primary)
-                        .padding(.vertical, 8)
-                        .frame(width: buttonWidth)
-                    
-                    if let score = sleepScores[formattedDate(date, format: "yyyy-MM-dd")] {
-                        Text("\(Int(score))")
-                            .font(.caption)
-                            .fontWeight(.bold)
-                            .foregroundColor(getScoreColor(for: score))
-                    } else {
-                        Text("-")
-                            .font(.caption)
-                            .foregroundColor(.gray)
+        ScrollView(.horizontal, showsIndicators: false) {
+            ScrollViewReader { proxy in
+                LazyHStack(spacing: 20) {
+                    ForEach((-3..<1), id: \.self) { weekOffset in
+                        weekView(weekOffset: weekOffset)
+                            .id(weekOffset)
                     }
+                }
+                .padding(.horizontal, UIScreen.screenWidth / 2 - 150)
+                .onAppear {
+                    proxy.scrollTo(0, anchor: .center)
                 }
             }
         }
-        .frame(height: 100)
-        .padding(.horizontal, UIScreen.screenWidth * 0.05)
+        .frame(height: 140)
     }
     
     var questionCard: some View {
@@ -123,6 +103,7 @@ struct SleepView: View {
                 .fill(.ultraThinMaterial)
         )
         .padding(.horizontal, 10)
+        .padding(.top, 20)
         .aspectRatio(contentMode: .fill)
         .shadow(color: Color("black0").opacity(0.3), radius: 10, x: 0, y: 10)
         
@@ -160,6 +141,72 @@ struct SleepView: View {
         .padding(.top, 50)
     }
     
+    func weekView(weekOffset: Int) -> some View {
+        let calendar = Calendar.current
+        let startOfWeek = calendar.date(byAdding: .weekOfYear, value: weekOffset, to: currentDate.startOfWeek())!
+        let weekDays = (0..<7).compactMap { calendar.date(byAdding: .day, value: $0, to: startOfWeek) }
+        
+        return VStack(spacing: 5) {
+            Text(formattedDate(startOfWeek, format: "MMMM"))
+                .font(.headline)
+                .foregroundColor(.primary)
+            
+            HStack(spacing: 10) {
+                ForEach(weekDays, id: \.self) { date in
+                    VStack {
+                        Text(formattedDate(date, format: "E"))
+                            .font(.caption2)
+                            .foregroundColor(.gray)
+                        
+                        Text(formattedDate(date, format: "d"))
+                            .font(.headline)
+                            .foregroundColor(.primary)
+                            .frame(width: 30, height: 30)
+                            .background(
+                                Circle()
+                                    .fill(Calendar.current.isDateInToday(date) ? Color.blackAndWhite.opacity(0.2) : Color.clear)
+                            )
+                        
+                        if let score = sleepScores[formattedDate(date, format: "yyyy-MM-dd")] {
+                            Text("\(Int(score))")
+                                .font(.caption2)
+                                .foregroundColor(getScoreColor(for: score))
+                        } else {
+                            Text("-")
+                                .font(.caption2)
+                                .foregroundColor(.gray)
+                        }
+                    }
+                }
+            }
+        }
+        .padding()
+        .background(RoundedRectangle(cornerRadius: 15).fill(.ultraThinMaterial))
+        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
+    }
+    
+    
+    func checkIfUserAnsweredToday() {
+        let today = formattedDate(Date(), format: "yyyy-MM-dd")
+        let lastAnsweredDate = UserDefaults.standard.string(forKey: "lastAnsweredDate") ?? ""
+        
+        if today == lastAnsweredDate {
+            hasAnsweredToday = true
+        }
+    }
+    
+    func formattedDate(_ date: Date, format: String) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = format
+        return formatter.string(from: date)
+    }
+    
+    func saveAnsweredToday() {
+        let today = formattedDate(Date(), format: "yyyy-MM-dd")
+        UserDefaults.standard.set(today, forKey: "lastAnsweredDate")
+    }
+    
+    
     func nextQuestion() {
         if currentQuestionIndex < questions.count - 1 {
             currentQuestionIndex += 1
@@ -182,7 +229,7 @@ struct SleepView: View {
     func saveSleepScore() {
         let averageScore = answers.reduce(0, +) / Double(answers.count)
         let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date())
-
+        
         if let yesterday = yesterday {
             let formattedDate = self.formattedDate(yesterday, format: "yyyy-MM-dd")
             sleepScores[formattedDate] = averageScore
@@ -216,36 +263,11 @@ struct SleepView: View {
         }
     }
     
-    func getCurrentWeekDays() -> [Date] {
-        let calendar = Calendar.current
-        let today = Date()
-        var startOfWeek: Date = today
-        var interval: TimeInterval = 0
-        
-        if calendar.dateInterval(of: .weekOfMonth, start: &startOfWeek, interval: &interval, for: today) {
-            return (0..<7).compactMap { calendar.date(byAdding: .day, value: $0, to: startOfWeek) }
+    func loadSleepScores() {
+        if let savedData = UserDefaults.standard.data(forKey: "sleepScores"),
+           let decoded = try? JSONDecoder().decode([String: Double].self, from: savedData) {
+            sleepScores = decoded
         }
-        return []
-    }
-    
-    func checkIfUserAnsweredToday() {
-        let today = formattedDate(Date(), format: "yyyy-MM-dd")
-        let lastAnsweredDate = UserDefaults.standard.string(forKey: "lastAnsweredDate") ?? ""
-
-        if today == lastAnsweredDate {
-            hasAnsweredToday = true
-        }
-    }
-    
-    func formattedDate(_ date: Date, format: String) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = format
-        return formatter.string(from: date)
-    }
-    
-    func saveAnsweredToday() {
-        let today = formattedDate(Date(), format: "yyyy-MM-dd")
-        UserDefaults.standard.set(today, forKey: "lastAnsweredDate")
     }
 }
 

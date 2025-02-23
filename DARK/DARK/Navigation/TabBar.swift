@@ -12,11 +12,11 @@ struct TabBar: View {
     @State private var color: Color = .pink
     @State private var selectedX: CGFloat = 0
     @State private var x: [CGFloat] = [0, 0, 0]
-
+    
     var body: some View {
         GeometryReader { proxy in
             let hasHomeIndicator = proxy.safeAreaInsets.bottom > 0
-
+            
             HStack(spacing: 0) {
                 ForEach(Array(tabItems.enumerated()), id: \.offset) { index, tab in
                     TabButton(index: index, tab: tab)
@@ -41,16 +41,16 @@ struct TabBar: View {
             }
         }
     }
-
-    private var indicatorCircle: some View {
+    
+    var indicatorCircle: some View {
         Circle()
             .fill(color)
             .offset(x: selectedX, y: -10)
             .frame(width: 88)
             .frame(maxWidth: .infinity, alignment: .leading)
     }
-
-    private var indicatorLine: some View {
+    
+    var indicatorLine: some View {
         Rectangle()
             .frame(width: 28, height: 5)
             .cornerRadius(3)
@@ -59,8 +59,8 @@ struct TabBar: View {
             .offset(x: selectedX)
             .blendMode(.overlay)
     }
-
-    private func TabButton(index: Int, tab: TabItem) -> some View {
+    
+    func TabButton(index: Int, tab: TabItem) -> some View {
         Button {
             selectedTab = tab.selection
             withAnimation(.bouncy) {
