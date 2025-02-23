@@ -30,7 +30,7 @@ struct SleepView: View {
                     calendarView
                     Spacer()
                     if hasAnsweredToday {
-                        
+                        EmptyView()
                     } else {
                         if isFinalScreenVisible {
                             sleepScoreCard
@@ -42,6 +42,18 @@ struct SleepView: View {
                 .padding(.top, 20)
             }
             .navigationTitle("Sleep")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    HStack(spacing: 2) {
+                        Text("Uyku Puanı    ")
+                            .font(.headline)
+                        Text("\(Int(calculateAverageSleepScore()))")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundColor(getScoreColor(for: calculateAverageSleepScore()))
+                    }
+                }
+            }
             .onAppear {
                 checkIfUserAnsweredToday()
                 loadSleepScores()
@@ -229,12 +241,20 @@ struct SleepView: View {
     func saveSleepScore() {
         let averageScore = answers.reduce(0, +) / Double(answers.count)
         let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date())
-        
+
         if let yesterday = yesterday {
             let formattedDate = self.formattedDate(yesterday, format: "yyyy-MM-dd")
             sleepScores[formattedDate] = averageScore
             saveSleepScores()
+            loadSleepScores() // Buraya eklendi
         }
+    }
+    
+    func calculateAverageSleepScore() -> Double {
+        let totalScore = sleepScores.values.reduce(0, +)
+        let daysCount = sleepScores.values.count
+        guard daysCount > 0 else { return 0 }
+        return totalScore / Double(daysCount)
     }
     
     func getEmoji(for value: Double) -> String {
