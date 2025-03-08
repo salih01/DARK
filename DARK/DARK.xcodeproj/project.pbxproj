@@ -42,6 +42,7 @@
 		9292FD5C2C8F9116004FB26A /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 9292FD5B2C8F9116004FB26A /* FirebaseFirestore */; };
 		9292FD5E2C8F9116004FB26A /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 9292FD5D2C8F9116004FB26A /* FirebaseStorage */; };
 		9298BD132D6B3BA700C98B3A /* Calendar+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9298BD122D6B3BA700C98B3A /* Calendar+Extension.swift */; };
+		9298BD162D6B6B9500C98B3A /* SleepSoundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9298BD152D6B6B9500C98B3A /* SleepSoundView.swift */; };
 		92B4EE4D2C35E80B00C4EDA1 /* Screen+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B4EE4C2C35E80B00C4EDA1 /* Screen+Extension.swift */; };
 		92BB1B782D14ABE20099DF44 /* musicLogin.json in Resources */ = {isa = PBXBuildFile; fileRef = 92BB1B772D14ABE20099DF44 /* musicLogin.json */; };
 		92BFBFA52C8C82DA005DAC74 /* RainSongListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BFBFA42C8C82DA005DAC74 /* RainSongListModel.swift */; };
@@ -86,6 +87,7 @@
 		927ED2452C2B6A230027DBEA /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		9283E5992CBDA71300CC3895 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
 		9298BD122D6B3BA700C98B3A /* Calendar+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Calendar+Extension.swift"; sourceTree = "<group>"; };
+		9298BD152D6B6B9500C98B3A /* SleepSoundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepSoundView.swift; sourceTree = "<group>"; };
 		92B4EE4C2C35E80B00C4EDA1 /* Screen+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Screen+Extension.swift"; sourceTree = "<group>"; };
 		92BB1B772D14ABE20099DF44 /* musicLogin.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = musicLogin.json; sourceTree = "<group>"; };
 		92BFBFA42C8C82DA005DAC74 /* RainSongListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RainSongListModel.swift; sourceTree = "<group>"; };
@@ -260,6 +262,7 @@
 		9256941D2D6202C80019F2F6 /* SleepView */ = {
 			isa = PBXGroup;
 			children = (
+				9298BD142D6B6B7C00C98B3A /* SleepSoundView */,
 				9256941E2D6202DF0019F2F6 /* SleepView.swift */,
 			);
 			path = SleepView;
@@ -292,6 +295,14 @@
 			);
 			name = AuthenticationView;
 			path = "AutenticationvİEW";
+			sourceTree = "<group>";
+		};
+		9298BD142D6B6B7C00C98B3A /* SleepSoundView */ = {
+			isa = PBXGroup;
+			children = (
+				9298BD152D6B6B9500C98B3A /* SleepSoundView.swift */,
+			);
+			path = SleepSoundView;
 			sourceTree = "<group>";
 		};
 		92BFBFA22C8C8172005DAC74 /* SongListModel */ = {
@@ -427,6 +438,7 @@
 			files = (
 				92D23E4D2C28AD940031EC98 /* Model.swift in Sources */,
 				9233CB2C2D21A145005D84FA /* FirestoreManager.swift in Sources */,
+				9298BD162D6B6B9500C98B3A /* SleepSoundView.swift in Sources */,
 				92B4EE4D2C35E80B00C4EDA1 /* Screen+Extension.swift in Sources */,
 				92BFBFA52C8C82DA005DAC74 /* RainSongListModel.swift in Sources */,
 				920770052BE958DF00DD5FA7 /* Persistence.swift in Sources */,

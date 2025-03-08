@@ -30,7 +30,7 @@ struct SleepView: View {
                     calendarView
                     Spacer()
                     if hasAnsweredToday {
-                        EmptyView()
+                        SleepSoundView()
                     } else {
                         if isFinalScreenVisible {
                             sleepScoreCard
